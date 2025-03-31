@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { Usuario } from './entities/usuario.entity';
@@ -67,5 +67,32 @@ export class AuthService {
       where: { id: usuarioId },
       select: ['id', 'nome', 'email', 'cargo', 'dataCadastro']
     });
+  }
+
+  async createAdminUser() {
+    const adminData = {
+      nome: 'Administrador',
+      email: 'admin@admin.com',
+      senha: 'Gt102102_',
+      cargo: 'admin',
+      ativo: true
+    };
+  
+    const existingAdmin = await this.usuarioRepository.findOne({ 
+      where: { email: adminData.email } 
+    });
+  
+    if (existingAdmin) {
+      throw new ConflictException('Usuário admin já existe');
+    }
+  
+    const hashedPassword = await bcrypt.hash(adminData.senha, 10);
+    const admin = this.usuarioRepository.create({
+      ...adminData,
+      senhaHash: hashedPassword
+    });
+  
+    await this.usuarioRepository.save(admin);
+    return { message: 'Usuário admin criado com sucesso' };
   }
 }

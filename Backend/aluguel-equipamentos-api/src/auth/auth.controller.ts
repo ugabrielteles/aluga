@@ -12,20 +12,20 @@ import { AuthResponseDto } from './dto/auth-response.dto';
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
   @ApiOperation({ summary: 'Login do usuário' })
   @ApiBody({ type: LoginDto })
-  @ApiResponse({ 
-    status: HttpStatus.OK, 
+  @ApiResponse({
+    status: HttpStatus.OK,
     description: 'Login realizado com sucesso',
     type: AuthResponseDto,
   })
-  @ApiResponse({ 
-    status: HttpStatus.UNAUTHORIZED, 
-    description: 'Credenciais inválidas' 
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Credenciais inválidas'
   })
   async login(
     @Body() loginDto: LoginDto,
@@ -34,7 +34,7 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response
   ) {
     const result = await this.authService.login(user, req.ip);
-    
+
     // Configura o cookie HTTP-only (opcional)
     res.cookie('access_token', result.access_token, {
       httpOnly: true,
@@ -51,9 +51,9 @@ export class AuthController {
 
   @Post('logout')
   @ApiOperation({ summary: 'Logout do usuário' })
-  @ApiResponse({ 
-    status: HttpStatus.OK, 
-    description: 'Logout realizado com sucesso' 
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Logout realizado com sucesso'
   })
   async logout(@Res({ passthrough: true }) res: Response) {
     // Remove o cookie de autenticação
@@ -65,14 +65,14 @@ export class AuthController {
   @Get('profile')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Obter informações do perfil do usuário' })
-  @ApiResponse({ 
-    status: HttpStatus.OK, 
+  @ApiResponse({
+    status: HttpStatus.OK,
     description: 'Perfil do usuário retornado com sucesso',
     type: AuthResponseDto,
   })
-  @ApiResponse({ 
-    status: HttpStatus.UNAUTHORIZED, 
-    description: 'Acesso não autorizado' 
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Acesso não autorizado'
   })
   getProfile(@User() user: Usuario) {
     return this.authService.getProfile(user.id);
@@ -82,19 +82,19 @@ export class AuthController {
   @Post('refresh')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Renovar token de acesso' })
-  @ApiResponse({ 
-    status: HttpStatus.OK, 
+  @ApiResponse({
+    status: HttpStatus.OK,
     description: 'Token renovado com sucesso',
     type: AuthResponseDto,
   })
-  @ApiResponse({ 
-    status: HttpStatus.UNAUTHORIZED, 
-    description: 'Token inválido ou expirado' 
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Token inválido ou expirado'
   })
   async refreshToken(@User() user: Usuario) {
     const payload = { email: user.email, sub: user.id, cargo: user.cargo };
     const accessToken = this.authService.getJwtService().sign(payload);
-    
+
     return {
       accessToken,
       usuario: {
@@ -104,5 +104,12 @@ export class AuthController {
         cargo: user.cargo,
       }
     };
+  }
+
+  @Post('seed-admin')
+  @ApiOperation({ summary: '[DEV] Criar usuário admin' })
+  @ApiResponse({ status: 201, description: 'Admin criado com sucesso' })
+  async seedAdmin() {
+    return this.authService.createAdminUser();
   }
 }

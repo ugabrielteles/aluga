@@ -9,6 +9,7 @@ import {
   import { ApiProperty } from '@nestjs/swagger';
   import { PartialType } from '@nestjs/swagger';
   import { CreateEquipamentoDto } from './create-equipamento.dto';
+import { IsNumeroSerieUnique } from '../validators/unique-numero-serie.validator';
   
   export class UpdateEquipamentoDto extends PartialType(CreateEquipamentoDto) {
     @ApiProperty({
@@ -58,13 +59,16 @@ import {
     fabricante?: string;
   
     @ApiProperty({
-      required: false,
-      description: 'Número de série do equipamento',
-      example: 'SN-123456789'
-    })
-    @IsOptional()
-    @IsString()
-    numeroSerie?: string;
+        required: false,
+        description: 'Número de série do equipamento',
+        example: 'SN-123456789'
+      })
+      @IsOptional()
+      @IsString()
+      @IsNumeroSerieUnique('id', {
+        message: 'Este número de série já está em uso por outro equipamento'
+      })
+      numeroSerie?: string;
   
     @ApiProperty({
       required: false,
