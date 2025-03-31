@@ -7,13 +7,16 @@ import {
   Put,
   Delete,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { EquipamentosService } from './equipamentos.service';
 import { CreateEquipamentoDto } from './dto/create-equipamento.dto';
 import { UpdateEquipamentoDto } from './dto/update-equipamento.dto';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @ApiTags('equipamentos')
+@UseGuards(JwtAuthGuard)
 @Controller('equipamentos')
 export class EquipamentosController {
   constructor(private readonly equipamentosService: EquipamentosService) {}

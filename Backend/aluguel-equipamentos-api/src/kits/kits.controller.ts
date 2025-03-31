@@ -1,12 +1,14 @@
-import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete, UseGuards } from '@nestjs/common';
 import { KitsService } from './kits.service';
 import { CreateKitDto } from './dto/create-kit.dto';
 import { UpdateKitDto } from './dto/update-kit.dto';
 import { AddItemKitDto } from './dto/add-item-kit.dto';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @ApiTags('kits')
 @Controller('kits')
+@UseGuards(JwtAuthGuard)
 export class KitsController {
   constructor(private readonly kitsService: KitsService) {}
 
