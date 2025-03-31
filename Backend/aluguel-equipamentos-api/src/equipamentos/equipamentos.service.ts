@@ -17,7 +17,7 @@ export class EquipamentosService {
 
   async create(createEquipamentoDto: CreateEquipamentoDto): Promise<Equipamento> {
     const categoria = await this.categoriaRepository.findOne({
-      where: { id: createEquipamentoDto.categoriaId },
+      where: { categoria_id: createEquipamentoDto.categoriaId },
     });
     
     if (!categoria) {
@@ -66,7 +66,7 @@ export class EquipamentosService {
     
     if (updateEquipamentoDto.categoriaId) {
       const categoria = await this.categoriaRepository.findOne({
-        where: { id: updateEquipamentoDto.categoriaId },
+        where: { categoria_id: updateEquipamentoDto.categoriaId },
       });
       
       if (!categoria) {
@@ -82,5 +82,14 @@ export class EquipamentosService {
   async remove(id: number): Promise<void> {
     const equipamento = await this.findOne(id);
     await this.equipamentoRepository.remove(equipamento);
+  }
+
+  async checkAvailability(id: number, start: Date, end: Date): Promise<{ available: number }> {
+    const equipamento = await this.findOne(id);
+    
+    // Aqui você implementaria a lógica para verificar quantos equipamentos estão disponíveis
+    // no período solicitado, considerando os contratos existentes
+    
+    return { available: equipamento.quantidadeDisponivel };
   }
 }

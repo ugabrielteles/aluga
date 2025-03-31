@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Put, Delete, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete, Query, UseGuards, Res, HttpStatus } from '@nestjs/common';
 import { ContratosService } from './contratos.service';
 import { CreateContratoDto } from './dto/create-contrato.dto';
 import { UpdateContratoDto } from './dto/update-contrato.dto';
@@ -8,6 +8,8 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { User } from '../auth/user.decorator';
 import { Usuario } from '../auth/entities/usuario.entity';
+import { Response } from 'express';
+import * as fs from 'fs';
 
 @ApiBearerAuth()
 @ApiTags('contratos')
@@ -70,9 +72,35 @@ export class ContratosController {
 
   @Get(':id/pdf')
   @ApiOperation({ summary: 'Gerar PDF do contrato' })
-  @ApiResponse({ status: 200, description: 'PDF gerado com sucesso.' })
-  generatePdf(@Param('id') id: string) {
-    return this.contratosService.generateContratoPdf(+id);
+  @ApiResponse({ 
+    status: HttpStatus.OK, 
+    description: 'PDF do contrato gerado com sucesso' 
+  })
+  @ApiResponse({ 
+    status: HttpStatus.NOT_FOUND, 
+    description: 'Contrato não encontrado' 
+  })
+  async generatePdf(
+    @Param('id') id: string,
+    @Res() res: Response
+  ) {
+    try {
+      const filePath = await this.contratosService.generateContratoPdf(+id);
+      
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename=contrato_${id}.pdf`);
+      
+      const fileStream = fs.createReadStream(filePath);
+      fileStream.pipe(res);
+      
+      fileStream.on('end', () => {
+        // Opcional: remover o arquivo após enviar
+        // fs.unlinkSync(filePath);
+      });
+      
+    } catch (error) {
+      throw error;
+    }
   }
 
   @Put(':id/status/:statusId')
@@ -81,4 +109,6 @@ export class ContratosController {
   updateStatus(@Param('id') id: string, @Param('statusId') statusId: string) {
     return this.contratosService.updateStatus(+id, +statusId);
   }
+
+  
 }

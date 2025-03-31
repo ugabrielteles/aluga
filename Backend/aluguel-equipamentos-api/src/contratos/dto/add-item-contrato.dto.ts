@@ -3,7 +3,7 @@ import { IsNotEmpty, IsNumber, IsPositive, IsIn } from 'class-validator';
 export class AddItemContratoDto {
   @IsNotEmpty()
   @IsNumber()
-  equipamento_id: number;
+  equipamentoId: number;
 
   @IsNotEmpty()
   @IsNumber()

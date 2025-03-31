@@ -13,6 +13,8 @@ import { Equipamento } from '../equipamentos/entities/equipamento.entity';
 import { Kit } from '../kits/entities/kit.entity';
 import { ContratoItem } from './entities/contrato-item.entity';
 import { ContratoKit } from './entities/contrato-kit.entity';
+import * as PDFDocument from 'pdfkit';
+import * as fs from 'fs';
 
 @Injectable()
 export class ContratosService {
@@ -55,7 +57,7 @@ export class ContratosService {
       observacoes: createContratoDto.observacoes,
       valorTotal: 0,
       valorFinal: 0,
-    });
+    } as Contrato);
 
     return this.contratoRepository.save(contrato);
   }
@@ -122,7 +124,7 @@ export class ContratosService {
       contrato,
       equipamento,
       quantidade: addItemDto.quantidade,
-      valorUnitario,
+      valor_unitario: valorUnitario,
       periodo: addItemDto.periodo,
     });
 
@@ -151,7 +153,7 @@ export class ContratosService {
       contrato,
       kit,
       quantidade: addKitDto.quantidade,
-      valorUnitario,
+      valor_unitario: valorUnitario,
       periodo: addKitDto.periodo,
     });
 
@@ -185,12 +187,57 @@ export class ContratosService {
       where: { contrato: { id: contrato.id } },
     });
 
-    const valorItens = itens.reduce((sum, item) => sum + (item.valorUnitario * item.quantidade), 0);
-    const valorKits = kits.reduce((sum, kit) => sum + (kit.valorUnitario * kit.quantidade), 0);
+    const valorItens = itens.reduce((sum, item) => sum + (item.valor_unitario * item.quantidade), 0);
+    const valorKits = kits.reduce((sum, kit) => sum + (kit.valor_unitario * kit.quantidade), 0);
 
     contrato.valorTotal = valorItens + valorKits;
     contrato.valorFinal = contrato.valorTotal - (contrato.desconto || 0);
 
     await this.contratoRepository.save(contrato);
+  }
+
+  async generateContratoPdf(contratoId: number): Promise<string> {
+    const contrato = await this.findOne(contratoId);
+    const filePath = `./contratos/contrato_${contratoId}.pdf`;
+    
+    const doc = new PDFDocument();
+    doc.pipe(fs.createWriteStream(filePath));
+    
+    // Cabeçalho
+    doc.fontSize(20).text('CONTRATO DE LOCAÇÃO DE EQUIPAMENTOS', { align: 'center' });
+    doc.moveDown();
+    
+    // Dados do contrato
+    doc.fontSize(12).text(`Contratante: ${contrato.cliente.nome}`);
+    doc.text(`CPF/CNPJ: ${contrato.cliente.cpfCnpj}`);
+    doc.moveDown();
+    
+    doc.text(`Período: ${contrato.dataInicio.toLocaleDateString()} a ${contrato.dataTermino.toLocaleDateString()}`);
+    doc.text(`Valor Total: R$ ${contrato.valorTotal.toFixed(2)}`);
+    doc.moveDown();
+    
+    // Itens do contrato
+    doc.text('Itens Alugados:');
+    contrato.itens.forEach(item => {
+      doc.text(`- ${item.equipamento.nome} (Qtd: ${item.quantidade})`);
+    });
+    
+    doc.end();
+    
+    return filePath;
+  }
+  
+  async updateStatus(contratoId: number, statusId: number): Promise<Contrato> {
+    const contrato = await this.findOne(contratoId);
+    const status = await this.statusRepository.findOne({
+      where: { status_id: statusId },
+    });
+
+    if (!status) {
+      throw new NotFoundException(`Status com ID ${statusId} não encontrado`);
+    }
+
+    contrato.status = status;
+    return this.contratoRepository.save(contrato);
   }
 }

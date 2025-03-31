@@ -55,11 +55,11 @@ export class KitsService {
   async addItem(kitId: number, addItemKitDto: AddItemKitDto): Promise<KitItem> {
     const kit = await this.findOne(kitId);
     const equipamento = await this.equipamentoRepository.findOne({
-      where: { id: addItemKitDto.equipamentoId },
+      where: { id: addItemKitDto.equipamento_id },
     });
 
     if (!equipamento) {
-      throw new NotFoundException(`Equipamento com ID ${addItemKitDto.equipamentoId} não encontrado`);
+      throw new NotFoundException(`Equipamento com ID ${addItemKitDto.equipamento_id} não encontrado`);
     }
 
     const kitItem = this.kitItemRepository.create({
@@ -73,7 +73,7 @@ export class KitsService {
 
   async removeItem(kitId: number, itemId: number): Promise<void> {
     const kitItem = await this.kitItemRepository.findOne({
-      where: { id: itemId, kit: { id: kitId } },
+      where: { kit_item_id: itemId, kit: { id: kitId } },
     });
 
     if (!kitItem) {
