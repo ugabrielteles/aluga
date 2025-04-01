@@ -1,13 +1,13 @@
 import React from 'react';
 
-interface Column<T> {
+export interface Column<T> {
   header: string;
   accessor: keyof T | ((item: T) => React.ReactNode);
   align?: 'left' | 'center' | 'right';
   width?: string;
 }
 
-interface TableProps<T> {
+export interface TableProps<T> {
   data: T[];
   columns: Column<T>[];
   keyAccessor: keyof T | ((item: T) => string | number);
@@ -40,14 +40,14 @@ const Table = <T,>({
 
   return (
     <div className="overflow-x-auto">
-      <table className={`min-w-full divide-y divide-gray-200 ${className}`}>
+      <table className={`min-w-full divide-y divide-gray-300 ${className}`}>
         <thead className={`bg-gray-50 ${headerClassName}`}>
           <tr>
             {columns.map((column, index) => (
               <th
                 key={index}
                 scope="col"
-                className={`px-6 py-3 text-${column.align || 'left'} text-xs font-medium text-gray-500 uppercase tracking-wider`}
+                className={`py-3.5 pl-4 pr-3  text-sm font-semibold text-gray-900 sm:pl-6 text-${column.align || 'left'}`}
                 style={{ width: column.width }}
               >
                 {column.header}
@@ -55,10 +55,10 @@ const Table = <T,>({
             ))}
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
+        <tbody className="divide-y divide-gray-200 bg-white">
           {data.length === 0 ? (
             <tr>
-              <td colSpan={columns.length} className="px-6 py-4 text-center text-gray-500">
+              <td colSpan={columns.length} className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                 {emptyMessage}
               </td>
             </tr>

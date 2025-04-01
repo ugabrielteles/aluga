@@ -33,7 +33,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     };
 
     const variantClasses = {
-      default: 'block w-full p-2.5 rounded-lg bg-gray-50 border border-gray-300 text-gray-900',
+      default: 'block w-full p-2.5 rounded-lg bg-gray-50 border focus:border-indigo-500 focus:ring-indigo-500 text-gray-900 outline-0 outline-offset-0',
       flushed: 'border-b-2 border-gray-300 focus:border-indigo-500 bg-transparent px-0 rounded-none',
     };
 

@@ -5,6 +5,7 @@ import api from '../../api/apiClient';
 import { toast } from 'react-toastify';
 import { CategoriaEquipamento } from '../../types/types';
 import Input from '../../components/ui/Input';
+import Select, { SelectOption } from '../../components/ui/Select';
 
 type EquipamentoFormData = {
   nome: string;
@@ -24,7 +25,7 @@ export default function EquipamentoForm() {
   const [categorias, setCategorias] = useState<CategoriaEquipamento[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  
+
   const { register, handleSubmit, formState: { errors }, reset } = useForm<EquipamentoFormData>();
 
   useEffect(() => {
@@ -73,7 +74,7 @@ export default function EquipamentoForm() {
   };
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8">
+    <div className="p4 sm:p-6 lg:p-8">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <h1 className="text-xl font-semibold text-gray-900">
@@ -88,64 +89,51 @@ export default function EquipamentoForm() {
               <label htmlFor="nome" className="block mb-2 text-sm font-medium text-gray-700">
                 Nome *
               </label>
-                           
-              <Input type="text" id="nome" {...register('nome', { required: 'Nome é obrigatório' })}></Input>
-              {errors.nome && <p className="mt-1 text-sm text-red-600">{errors.nome.message}</p>}
+
+              <Input type="text" id="nome" {...register('nome', { required: 'Nome é obrigatório' })} error={errors.nome && errors.nome.message}></Input>
             </div>
 
             <div className="sm:col-span-3">
-              <label htmlFor="categoriaId" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="categoriaId" className="block mb-2 text-sm font-medium text-gray-700">
                 Categoria *
               </label>
-              <select
+
+              <Select
                 id="categoriaId"
                 {...register('categoriaId', { required: 'Categoria é obrigatória', valueAsNumber: true })}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              >
-                <option value="">Selecione uma categoria</option>
-                {categorias.map((categoria) => (
-                  <option key={categoria.id} value={categoria.id}>
-                    {categoria.nome}
-                  </option>
-                ))}
-              </select>
-              {errors.categoriaId && <p className="mt-1 text-sm text-red-600">{errors.categoriaId.message}</p>}
+                required={true}
+                error={errors.categoriaId && errors.categoriaId.message}
+                options={
+                  categorias.map(x => {
+                    return {
+                      label: x.descricao,
+                      value: x.id
+                    } as SelectOption
+                  })}
+              ></Select>
             </div>
 
             <div className="sm:col-span-2">
-              <label htmlFor="modelo" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="nome" className="block mb-2 text-sm font-medium text-gray-700">
                 Modelo
               </label>
-              <input
-                type="text"
-                id="modelo"
-                {...register('modelo')}
-                className="block w-full p-2.5 rounded-lg bg-gray-50 border border-gray-300 text-gray-900"
-              />
+              <Input type="text" id="modelo"  {...register('modelo')}></Input>
             </div>
 
             <div className="sm:col-span-2">
-              <label htmlFor="fabricante" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="fabricante" className="block mb-2 text-sm font-medium text-gray-700">
                 Fabricante
               </label>
-              <input
-                type="text"
-                id="fabricante"
-                {...register('fabricante')}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              />
+              <Input type="text" id="fabricante"   {...register('fabricante')}></Input>
+            
             </div>
 
             <div className="sm:col-span-2">
-              <label htmlFor="numeroSerie" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="fabricante" className="block mb-2 text-sm font-medium text-gray-700">
                 Número de Série *
               </label>
-              <input
-                type="text"
-                id="numeroSerie"
-                {...register('numeroSerie', { required: 'Número de série é obrigatório' })}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              />
+              <Input type="text" id="numeroSerie"   {...register('numeroSerie')}></Input>
+             
               {errors.numeroSerie && <p className="mt-1 text-sm text-red-600">{errors.numeroSerie.message}</p>}
             </div>
 

@@ -7,7 +7,7 @@ export interface HeaderProps {
 const Header = () => {
     return (
         <>
-            <header className="bg-white shadow-sm">
+            <header className="bg-white border border-x-white">
                 <div className="flex items-center justify-between p-4">
                     <div className="flex items-center bg-gray-100 rounded-lg px-3 py-2 w-96">
                         {/* <FiSearch className="text-gray-500 mr-2" /> */}
