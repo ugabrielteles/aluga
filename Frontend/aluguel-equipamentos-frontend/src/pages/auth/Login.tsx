@@ -23,7 +23,7 @@ export default function Login() {
         email: data.email,
         senha: data.password
       });
-      login(response.data.access_token);
+      login(response.data.accessToken);
       navigate('/');
       toast.success('Login realizado com sucesso!');
     } catch (error) {

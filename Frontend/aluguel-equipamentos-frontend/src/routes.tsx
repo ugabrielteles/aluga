@@ -13,69 +13,40 @@ const EquipamentoForm = lazy(() => import('./pages/equipamentos/EquipamentoForm'
 // const ContratoForm = lazy(() => import('./pages/contratos/ContratoForm'));
 
 export default function AppRoutes() {
+
+  
+
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
-      
-      <Route path="/" element={<Layout />}>
+
+      <Route path="/" element={
+        <RequireAuth>
+          <Layout />
+        </RequireAuth>
+        }>
         <Route index element={
-          <RequireAuth>
-            <Home />
-          </RequireAuth>
+           <Home />
         } />
-        
-        <Route path="equipamentos">
-          <Route index element={
-            <RequireAuth>
-              <EquipamentosList />
-            </RequireAuth>
-          } />
-          <Route path="novo" element={
-            <RequireAuth>
-              <EquipamentoForm />
-            </RequireAuth>
-          } />
-          <Route path=":id" element={
-            <RequireAuth>
-              <EquipamentoForm />
-            </RequireAuth>
-          } />
+
+        <Route path="/home" element={<Home />}></Route>
+
+        <Route path="/equipamentos">
+          <Route index element={<EquipamentosList />} />
+          <Route path="novo" element={<EquipamentoForm />} />
+          <Route path=":id" element={<EquipamentoForm />} />
         </Route>
-        
+
         <Route path="clientes">
-          <Route index element={
-            <RequireAuth>
-              <div />
-            </RequireAuth>
-          } />
-          <Route path="novo" element={
-            <RequireAuth>
-              <div />
-            </RequireAuth>
-          } />
-          <Route path=":id" element={
-            <RequireAuth>
-               <div />
-            </RequireAuth>
-          } />
+          <Route index element={ <div />} />
+          <Route path="novo" element={ <div />} />
+          <Route path=":id" element={ <div />} />
         </Route>
-        
+
         <Route path="contratos">
-          <Route index element={
-            <RequireAuth>
-              <div />
-            </RequireAuth>
-          } />
-          <Route path="novo" element={
-            <RequireAuth>
-              <div />
-            </RequireAuth>
-          } />
-          <Route path=":id" element={
-            <RequireAuth>
-              <div />
-            </RequireAuth>
-          } />
+          <Route index element={ <div />} />
+          <Route path="novo" element={ <div />} />
+          <Route path=":id" element={ <div />} />
         </Route>
       </Route>
     </Routes>

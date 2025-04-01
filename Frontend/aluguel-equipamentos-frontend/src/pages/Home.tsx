@@ -1,7 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FiHome, FiCalendar, FiTool, FiUsers, FiSettings, FiBell, FiSearch, FiPlus } from 'react-icons/fi';
 
 const Home = () => {
+
+  useEffect(() => {
+    console.log('sdfsdfsd')
+  })
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activeTab, setActiveTab] = useState('dashboard');
 
@@ -28,90 +32,11 @@ const Home = () => {
   ];
 
   return (
-    <div className="flex h-screen bg-gray-50">
-      {/* Sidebar */}
-      <div className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-indigo-800 text-white transition-all duration-300 ease-in-out`}>
-        <div className="p-4 flex items-center justify-between">
-          {sidebarOpen ? (
-            <h1 className="text-xl font-bold">EquipRental</h1>
-          ) : (
-            <span className="text-xl font-bold">ER</span>
-          )}
-          <button 
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-1 rounded-lg hover:bg-indigo-700"
-          >
-            {sidebarOpen ? '◀' : '▶'}
-          </button>
-        </div>
-        <nav className="mt-6">
-          <NavItem 
-            icon={<FiHome size={20} />} 
-            text="Dashboard" 
-            active={activeTab === 'dashboard'} 
-            onClick={() => setActiveTab('dashboard')}
-            sidebarOpen={sidebarOpen} 
-          />
-          <NavItem 
-            icon={<FiCalendar size={20} />} 
-            text="Aluguéis" 
-            active={activeTab === 'rentals'} 
-            onClick={() => setActiveTab('rentals')}
-            sidebarOpen={sidebarOpen} 
-          />
-          <NavItem 
-            icon={<FiTool size={20} />} 
-            text="Equipamentos" 
-            active={activeTab === 'equipment'} 
-            onClick={() => setActiveTab('equipment')}
-            sidebarOpen={sidebarOpen} 
-          />
-          <NavItem 
-            icon={<FiUsers size={20} />} 
-            text="Clientes" 
-            active={activeTab === 'clients'} 
-            onClick={() => setActiveTab('clients')}
-            sidebarOpen={sidebarOpen} 
-          />
-          <NavItem 
-            icon={<FiSettings size={20} />} 
-            text="Configurações" 
-            active={activeTab === 'settings'} 
-            onClick={() => setActiveTab('settings')}
-            sidebarOpen={sidebarOpen} 
-          />
-        </nav>
-      </div>
+    <div className="flex h-screen bg-gray-50">    
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Header */}
-        <header className="bg-white shadow-sm">
-          <div className="flex items-center justify-between p-4">
-            <div className="flex items-center bg-gray-100 rounded-lg px-3 py-2 w-96">
-              {/* <FiSearch className="text-gray-500 mr-2" /> */}
-              <input 
-                type="text" 
-                placeholder="Pesquisar equipamentos, clientes..." 
-                className="bg-transparent border-none focus:outline-none w-full"
-              />
-            </div>
-            <div className="flex items-center space-x-4">
-              <button className="p-2 rounded-full hover:bg-gray-100 relative">
-                {/* <FiBell className="text-gray-600" /> */}
-                <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
-              </button>
-              <div className="flex items-center">
-                <img 
-                  src="https://via.placeholder.com/40" 
-                  alt="User" 
-                  className="w-8 h-8 rounded-full"
-                />
-                <span className="ml-2 text-sm font-medium">Admin</span>
-              </div>
-            </div>
-          </div>
-        </header>
+       
 
         {/* Page Content */}
         <main className="flex-1 overflow-y-auto p-6 bg-gray-50">

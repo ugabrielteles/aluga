@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import api from '../../api/apiClient';
 import { toast } from 'react-toastify';
 import { CategoriaEquipamento } from '../../types/types';
+import Input from '../../components/ui/Input';
 
 type EquipamentoFormData = {
   nome: string;
@@ -84,15 +85,11 @@ export default function EquipamentoForm() {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
             <div className="sm:col-span-3">
-              <label htmlFor="nome" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="nome" className="block mb-2 text-sm font-medium text-gray-700">
                 Nome *
               </label>
-              <input
-                type="text"
-                id="nome"
-                {...register('nome', { required: 'Nome é obrigatório' })}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              />
+                           
+              <Input type="text" id="nome" {...register('nome', { required: 'Nome é obrigatório' })}></Input>
               {errors.nome && <p className="mt-1 text-sm text-red-600">{errors.nome.message}</p>}
             </div>
 
@@ -123,7 +120,7 @@ export default function EquipamentoForm() {
                 type="text"
                 id="modelo"
                 {...register('modelo')}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                className="block w-full p-2.5 rounded-lg bg-gray-50 border border-gray-300 text-gray-900"
               />
             </div>
 

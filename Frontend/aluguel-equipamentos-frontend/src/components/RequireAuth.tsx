@@ -5,6 +5,8 @@ import { JSX } from 'react';
 export default function RequireAuth({ children }: { children: JSX.Element }) {
   const { token } = useAuth();
 
+  console.log(token)
+
   if (!token) {
     return <Navigate to="/login" replace />;
   }
