@@ -12,7 +12,7 @@ import { EstoqueModule } from './estoque/estoque.module';
 import { TemplatesModule } from './templates/templates.module';
 import { LogsModule } from './logs/logs.module';
 import { LogsInterceptor } from './logs/logs.interceptor';
-import { CategoriaModule } from './categoria/categoria.module';
+import { CategoriaEquipamentoModule } from './categoria-equipamento/categoria-equipamento.module';
 
 @Module({
   imports: [
@@ -28,7 +28,7 @@ import { CategoriaModule } from './categoria/categoria.module';
     EstoqueModule,
     TemplatesModule,
     LogsModule,
-    CategoriaModule
+    CategoriaEquipamentoModule
   ],
   providers: [
     {

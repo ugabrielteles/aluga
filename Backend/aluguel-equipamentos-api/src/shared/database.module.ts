@@ -3,7 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Usuario } from '../auth/entities/usuario.entity';
 import { Cliente } from '../clientes/entities/cliente.entity';
-import { CategoriaEquipamento } from '../equipamentos/entities/categoria-equipamento.entity';
 import { Equipamento } from '../equipamentos/entities/equipamento.entity';
 import { Kit } from '../kits/entities/kit.entity';
 import { KitItem } from '../kits/entities/kit-item.entity';
@@ -14,6 +13,7 @@ import { StatusContrato } from '../contratos/entities/status-contrato.entity';
 import { EstoqueMovimentacao } from '../estoque/entities/estoque-movimentacao.entity';
 import { ContratoTemplate } from '../templates/entities/contrato-template.entity';
 import { Log } from '../logs/entities/log.entity';
+import { CategoriaEquipamento } from 'src/categoria-equipamento/entities/categoria-equipamento.entity';
 
 @Module({
   imports: [

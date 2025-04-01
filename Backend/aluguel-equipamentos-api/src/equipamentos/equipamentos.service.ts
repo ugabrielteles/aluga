@@ -4,21 +4,19 @@ import { Repository, Like } from 'typeorm';
 import { Equipamento } from './entities/equipamento.entity';
 import { CreateEquipamentoDto } from './dto/create-equipamento.dto';
 import { UpdateEquipamentoDto } from './dto/update-equipamento.dto';
-import { CategoriaEquipamento } from './entities/categoria-equipamento.entity';
+import { CategoriaEquipamento } from 'src/categoria-equipamento/entities/categoria-equipamento.entity';
+import { CategoriaEquipamentoService } from 'src/categoria-equipamento/categoria-equipamento.service';
 
 @Injectable()
 export class EquipamentosService {
   constructor(
     @InjectRepository(Equipamento)
     private equipamentoRepository: Repository<Equipamento>,
-    @InjectRepository(CategoriaEquipamento)
-    private categoriaRepository: Repository<CategoriaEquipamento>,
+    private readonly categoriaService: CategoriaEquipamentoService
   ) {}
 
   async create(createEquipamentoDto: CreateEquipamentoDto): Promise<Equipamento> {
-    const categoria = await this.categoriaRepository.findOne({
-      where: { categoria_id: createEquipamentoDto.categoriaId },
-    });
+    const categoria = await this.categoriaService.findOne(createEquipamentoDto.categoriaId);
     
     if (!categoria) {
       throw new NotFoundException('Categoria não encontrada');
@@ -65,9 +63,7 @@ export class EquipamentosService {
     const equipamento = await this.findOne(id);
     
     if (updateEquipamentoDto.categoriaId) {
-      const categoria = await this.categoriaRepository.findOne({
-        where: { categoria_id: updateEquipamentoDto.categoriaId },
-      });
+      const categoria = await this.categoriaService.findOne(updateEquipamentoDto.categoriaId);
       
       if (!categoria) {
         throw new NotFoundException('Categoria não encontrada');

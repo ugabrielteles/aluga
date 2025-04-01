@@ -1,8 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
-import { CategoriaEquipamento } from './categoria-equipamento.entity';
 import { KitItem } from '../../kits/entities/kit-item.entity';
 import { ContratoItem } from '../../contratos/entities/contrato-item.entity';
 import { EstoqueMovimentacao } from '../../estoque/entities/estoque-movimentacao.entity';
+import { CategoriaEquipamento } from '../../categoria-equipamento/entities/categoria-equipamento.entity';
 
 @Entity('equipamentos')
 export class Equipamento {
