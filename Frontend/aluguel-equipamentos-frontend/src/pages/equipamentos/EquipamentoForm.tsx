@@ -103,11 +103,12 @@ export default function EquipamentoForm() {
                 {...register('categoriaId', { required: 'Categoria é obrigatória', valueAsNumber: true })}
                 required={true}
                 error={errors.categoriaId && errors.categoriaId.message}
+                placeholder="Selecione a categoria"
                 options={
                   categorias.map(x => {
                     return {
-                      label: x.descricao,
-                      value: x.id
+                      label: x.nome,
+                      value: x.categoria_id
                     } as SelectOption
                   })}
               ></Select>
@@ -125,73 +126,43 @@ export default function EquipamentoForm() {
                 Fabricante
               </label>
               <Input type="text" id="fabricante"   {...register('fabricante')}></Input>
-            
+
             </div>
 
             <div className="sm:col-span-2">
-            <label htmlFor="fabricante" className="block mb-2 text-sm font-medium text-gray-700">
+              <label htmlFor="fabricante" className="block mb-2 text-sm font-medium text-gray-700">
                 Número de Série *
               </label>
-              <Input type="text" id="numeroSerie"   {...register('numeroSerie')}></Input>
-             
-              {errors.numeroSerie && <p className="mt-1 text-sm text-red-600">{errors.numeroSerie.message}</p>}
+              <Input type="text" id="numeroSerie" {...register('numeroSerie')}></Input>
             </div>
 
             <div className="sm:col-span-2">
               <label htmlFor="valorDiaria" className="block text-sm font-medium text-gray-700">
                 Valor Diária (R$) *
               </label>
-              <input
-                type="number"
-                id="valorDiaria"
-                step="0.01"
-                min="0"
-                {...register('valorDiaria', { required: 'Valor diária é obrigatório', valueAsNumber: true })}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              />
-              {errors.valorDiaria && <p className="mt-1 text-sm text-red-600">{errors.valorDiaria.message}</p>}
+
+              <Input step="0.01" min="0" type="number" id="valorDiaria" {...register('valorDiaria', { required: 'Valor diária é obrigatório', valueAsNumber: true })}></Input>
             </div>
 
             <div className="sm:col-span-2">
               <label htmlFor="valorSemanal" className="block text-sm font-medium text-gray-700">
                 Valor Semanal (R$)
               </label>
-              <input
-                type="number"
-                id="valorSemanal"
-                step="0.01"
-                min="0"
-                {...register('valorSemanal', { valueAsNumber: true })}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              />
+              <Input step="0.01" min="0" type="number" id="valorSemanal"  {...register('valorSemanal', { valueAsNumber: true })}></Input>
             </div>
 
             <div className="sm:col-span-2">
               <label htmlFor="valorMensal" className="block text-sm font-medium text-gray-700">
                 Valor Mensal (R$)
-              </label>
-              <input
-                type="number"
-                id="valorMensal"
-                step="0.01"
-                min="0"
-                {...register('valorMensal', { valueAsNumber: true })}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              />
+              </label>              
+              <Input step="0.01" min="0" type="number" id="valorMensal"   {...register('valorMensal', { valueAsNumber: true })}></Input>
             </div>
 
             <div className="sm:col-span-2">
               <label htmlFor="quantidadeTotal" className="block text-sm font-medium text-gray-700">
                 Quantidade Total *
-              </label>
-              <input
-                type="number"
-                id="quantidadeTotal"
-                min="1"
-                {...register('quantidadeTotal', { required: 'Quantidade é obrigatória', valueAsNumber: true })}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              />
-              {errors.quantidadeTotal && <p className="mt-1 text-sm text-red-600">{errors.quantidadeTotal.message}</p>}
+              </label>              
+              <Input min="1" type="number" id="quantidadeTotal"   {...register('quantidadeTotal', { valueAsNumber: true })}></Input>
             </div>
           </div>
 

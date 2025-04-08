@@ -2,6 +2,8 @@ import { lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import RequireAuth from './components/RequireAuth';
 import Layout from './components/layout/Layout';
+import CategoriaEquipamentoList from './pages/categoria-equipamentos/CategoriaEquipamentoList';
+import CategoriaEquipamentoForm from './pages/categoria-equipamentos/CategoriaEquipamentoForm';
 
 const Login = lazy(() => import('./pages/auth/Login'));
 const Home = lazy(() => import('./pages/Home'));
@@ -35,6 +37,11 @@ export default function AppRoutes() {
           <Route index element={<EquipamentosList />} />
           <Route path="novo" element={<EquipamentoForm />} />
           <Route path=":id" element={<EquipamentoForm />} />
+        </Route>
+
+        <Route path="/categorias-equipamento" element={<CategoriaEquipamentoList />}>          
+          <Route index path="novo" element={<CategoriaEquipamentoForm />} />
+          <Route path=":id" element={<CategoriaEquipamentoForm />} />
         </Route>
 
         <Route path="clientes">

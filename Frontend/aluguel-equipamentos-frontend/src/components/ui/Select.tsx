@@ -1,4 +1,4 @@
-import React, { forwardRef, SelectHTMLAttributes } from 'react';
+import React, { forwardRef, SelectHTMLAttributes, useEffect } from 'react';
 
 export interface SelectOption {
     value: string | number;
@@ -8,7 +8,7 @@ export interface SelectOption {
 interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
     options: SelectOption[];
     value?: string | number;
-    onChange?: (value: any) => void;
+    onChangeValue?: (value: any) => void;
     label?: string;
     placeholder?: string;
     required?: boolean;
@@ -22,7 +22,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
         {
             options,
             value,
-            onChange,
+            onChangeValue = null,
             label,
             placeholder = 'Selecione uma opção',
             required = false,
@@ -32,8 +32,13 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
         },
         ref
     ) => {
+
         const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-            onChange?.(e.target.value);
+
+            if (onChangeValue && typeof onChangeValue == 'function') {
+                onChangeValue?.(e.target.value);
+            }
+
         };
 
         return (
@@ -46,6 +51,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
                 )}
 
                 <select
+                    ref={ref}
                     value={value}
                     onChange={handleChange}
                     disabled={disabled}

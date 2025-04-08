@@ -28,6 +28,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
+export const tokenExpired = (token: string): boolean => {        
+  const decode = JSON.parse(atob(token.split('.')[1]));
+  return decode.exp * 1000 < new Date().getTime();
+};
+
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {

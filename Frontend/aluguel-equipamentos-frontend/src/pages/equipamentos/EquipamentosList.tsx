@@ -11,8 +11,12 @@ export default function EquipamentosList() {
 
   const columns: Column<any>[] = [
     {
+      header: "ID",
+      accessor: 'id'
+    },
+    {
       header: 'Nome',
-      accessor: 'descricao'
+      accessor: 'nome'
     },
     {
       header: 'Modelo',
@@ -82,60 +86,7 @@ export default function EquipamentosList() {
           <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
             <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
 
-              <Table data={[]} keyAccessor="tabela-equipamento" columns={columns}></Table>
-              <table className="min-w-full divide-y divide-gray-300">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
-                      Nome
-                    </th>
-                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                      Modelo
-                    </th>
-                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                      Valor Diária
-                    </th>
-                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                      Disponível
-                    </th>
-                    <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
-                      <span className="sr-only">Ações</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200 bg-white">
-                  {equipamentos.map((equipamento) => (
-                    <tr key={equipamento.id}>
-                      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                        {equipamento.nome}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {equipamento.modelo}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        R$ {equipamento.valorDiaria.toFixed(2)}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {equipamento.quantidadeDisponivel} / {equipamento.quantidadeTotal}
-                      </td>
-                      <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                        <Link
-                          to={`/equipamentos/${equipamento.id}`}
-                          className="text-indigo-600 hover:text-indigo-900 mr-4"
-                        >
-                          Editar
-                        </Link>
-                        <button
-                          onClick={() => handleDelete(equipamento.id)}
-                          className="text-red-600 hover:text-red-900"
-                        >
-                          Excluir
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              <Table data={equipamentos} keyAccessor={"id"} columns={columns}></Table>             
             </div>
           </div>
         </div>

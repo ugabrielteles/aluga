@@ -1,10 +1,13 @@
 import React from 'react';
 
+
 export interface Column<T> {
   header: string;
   accessor: keyof T | ((item: T) => React.ReactNode);
   align?: 'left' | 'center' | 'right';
   width?: string;
+  show?: boolean;
+  actionTemplate?: any
 }
 
 export interface TableProps<T> {
@@ -17,7 +20,7 @@ export interface TableProps<T> {
   className?: string;
   headerClassName?: string;
   rowClassName?: string;
-  cellClassName?: string;
+  cellClassName?: string;  
 }
 
 const Table = <T,>({
@@ -30,8 +33,9 @@ const Table = <T,>({
   className = '',
   headerClassName = '',
   rowClassName = '',
-  cellClassName = '',
+  cellClassName = ''
 }: TableProps<T>) => {
+
   const getKey = (item: T): string | number => {
     return typeof keyAccessor === 'function' 
       ? keyAccessor(item) 
@@ -75,9 +79,13 @@ const Table = <T,>({
                     key={colIndex}
                     className={`px-6 py-4 whitespace-nowrap text-${column.align || 'left'} text-sm text-gray-900 ${cellClassName}`}
                   >
-                    {typeof column.accessor === 'function'
+                    {column.accessor && typeof column.accessor === 'function'
                       ? column.accessor(item)
-                      : (item[column.accessor] as React.ReactNode)}
+                      : (item[column.accessor] as React.ReactNode)
+                    } 
+                    {
+                      column.actionTemplate
+                    }                 
                   </td>
                 ))}
               </tr>

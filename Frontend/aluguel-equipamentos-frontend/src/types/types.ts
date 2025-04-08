@@ -23,7 +23,7 @@ export interface Usuario {
   }
   
   export interface CategoriaEquipamento {
-    id: number;
+    categoria_id: number;
     nome: string;
     descricao?: string;
   }

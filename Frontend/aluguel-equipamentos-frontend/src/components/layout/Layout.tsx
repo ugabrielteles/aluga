@@ -8,10 +8,6 @@ import Header from './Header';
 const Layout = ({ children }: any) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  useEffect(() => {
-    console.log('qqq', children)
-  })
-
   return (
     <div className="min-h-screen">
       <SidebarButton
