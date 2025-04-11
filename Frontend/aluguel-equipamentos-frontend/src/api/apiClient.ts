@@ -1,5 +1,6 @@
-import axios from 'axios';
+import axios, { AxiosError, HttpStatusCode } from 'axios';
 import { getToken, clearToken } from '../contexts/AuthContext';
+import { toast } from 'react-toastify';
 
 const api = axios.create({
   baseURL: 'http://localhost:3000', // URL da sua API NestJS
@@ -16,10 +17,16 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      clearToken();
-      window.location.href = '/login';
+    switch (error.response?.status) {
+      case HttpStatusCode.Unauthorized:
+        clearToken();
+        window.location.href = '/login';
+        break;
+      case HttpStatusCode.InternalServerError:
+        console.error(error)
+        break;
     }
+
     return Promise.reject(error);
   }
 );

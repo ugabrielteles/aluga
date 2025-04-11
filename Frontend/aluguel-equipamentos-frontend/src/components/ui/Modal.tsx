@@ -14,14 +14,15 @@ export interface ModalProps {
     confirmButtonType?: 'submit' | 'button' | 'reset'
     disabledConfirmButton?: boolean;
     isLoading?: boolean;
-    onCloseModal: () => void;
+    onCloseModal: (event: any) => void;
     onComplete?: () => void;
 }
 
-export default function Modal({ show, children, title, icon, cancelButtonText, confirmButtonText, disabledConfirmButton, confirmButtonType, onCloseModal, onComplete }: ModalProps) {
+export default function Modal({ show, children, title, icon, cancelButtonText, confirmButtonText, disabledConfirmButton, confirmButtonType, isLoading, onCloseModal, onComplete }: ModalProps) {
     return (
-        <Dialog open={show} onClose={onCloseModal} className="relative z-40 ">
+        <Dialog open={show} onClose={() => null} className="relative z-40" >
             <DialogBackdrop
+
                 transition
                 className="fixed inset-0 bg-gray-500/75 transition-opacity data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in"
             />
@@ -34,7 +35,7 @@ export default function Modal({ show, children, title, icon, cancelButtonText, c
                     >
                         <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                             <DialogTitle as="h3" className="text-base font-semibold text-gray-900  flex flex-row gap-2">
-                              {title}
+                                {title}
                             </DialogTitle>
                         </div>
 
@@ -44,15 +45,12 @@ export default function Modal({ show, children, title, icon, cancelButtonText, c
                         <div className="flex px-4 py-3 space-x-3 sm:flex sm:flex-row-reverse sm:px-6 gap-2 bg-gray-50">
                             <button
                                 type={confirmButtonType ?? 'submit'}
-                                onClick={() => {
-                                    onCloseModal();
-
+                                onClick={(event) => {
                                     if (onComplete && typeof onComplete === 'function') {
                                         onComplete();
                                     }
-
                                 }}
-                                disabled={disabledConfirmButton ?? false}
+                                disabled={isLoading ?? false}
                                 className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                             >
                                 {confirmButtonText ?? 'Confirmar'}

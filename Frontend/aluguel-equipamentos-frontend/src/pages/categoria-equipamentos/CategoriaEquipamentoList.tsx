@@ -7,6 +7,8 @@ import EditIcon from '../../components/icons/Edit';
 import DeleteIcon from '../../components/icons/Delete';
 import { CellContext, createColumnHelper, flexRender, getCoreRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, Row } from '@tanstack/react-table';
 import Modal from '../../components/ui/Modal';
+import PageHeader from '../../components/layout/PageHeader';
+import { AxiosError } from 'axios';
 
 const columnHelper = createColumnHelper<CategoriaEquipamento>();
 
@@ -71,19 +73,20 @@ export default function CategoriaEquipamentoList() {
         };
 
         fetchCategoriasEquipamento();
-        
+
     }, [location.key]);
 
     const handleDelete = async (id: number | undefined) => {
         if (!id) return;
 
-        if (window.confirm('Tem certeza que deseja excluir esta categoria equipamento?')) {
-            try {
-                await api.delete(`/categorias-equipamentos/${id}`);
-                setCategoriasEquipamento(categoriasEquipamento.filter(e => e.categoria_id !== id));
-                toast.success('Categoria equipamento excluída com sucesso');
-            } catch (error) {
-                toast.error('Erro ao excluir Categoria equipamento');
+        try {
+            await api.delete(`/categorias-equipamentos/${id}`);
+            setCategoriasEquipamento(categoriasEquipamento.filter(e => e.categoria_id !== id));
+            toast.success('Categoria equipamento excluída com sucesso');
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                
+                toast.error(error.response?.data?.message);
             }
         }
     };
@@ -97,9 +100,10 @@ export default function CategoriaEquipamentoList() {
     }
 
     const onDeleteClick = (cellContext: CellContext<CategoriaEquipamento, CategoriaEquipamento>) => {
+        debugger
+        const row = cellContext.row.original as unknown as CategoriaEquipamento;
         setModalDeleteOpen(true);
-        setRowToDelete(cellContext.row as unknown as CategoriaEquipamento)
-        // handleDelete(cellContext.row.getValue('categoria_id'))
+        setRowToDelete(row);
     }
 
 
@@ -113,22 +117,10 @@ export default function CategoriaEquipamentoList() {
         <>
             <Outlet />
             <div className="p-4 sm:px-6 lg:px-8">
-                <div className="sm:flex sm:items-center">
-                    <div className="sm:flex-auto">
-                        <h1 className="text-xl font-semibold text-gray-900">Categorias equipamento</h1>
-                        <p className="mt-2 text-sm text-gray-700">
-                            Lista de todos as categorias de equipamentos
-                        </p>
-                    </div>
-                    <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-                        <Link
-                            to="/categorias-equipamento/novo"
-                            className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
-                        >
-                            Adicionar Categoria Equipamento
-                        </Link>
-                    </div>
-                </div>
+                <PageHeader
+                    Addlink="/categorias-equipamento/novo"
+                    Title="Categorias equipamento"
+                    Description="Lista de todos as categorias de equipamentos" />
                 <div className="mt-8 flex flex-col">
                     <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
                         <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
@@ -172,13 +164,13 @@ export default function CategoriaEquipamentoList() {
                 </div>
             </div>
             <Modal
-                title={modalDeleteTitle}
+                title="Remover Categoria?"
                 show={isModalDeleteOpen} onCloseModal={() => setModalDeleteOpen(false)}
                 onComplete={() => handleDelete(rowToDelete?.categoria_id)}
                 children={
                     <>
                         <p className="text-sm text-gray-500">
-                            Você realmente deseja remover a categoria
+                            Você realmente deseja remover a categoria <b>{rowToDelete?.nome}</b>?
                         </p>
                     </>
                 } />

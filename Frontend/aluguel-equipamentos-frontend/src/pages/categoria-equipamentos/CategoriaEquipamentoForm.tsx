@@ -51,9 +51,8 @@ export default function CategoriaEquipamentoForm() {
         await api.post('/categorias-equipamentos', data);
         toast.success('Categoria de equipamento criada com sucesso');
       }
-      navigate('/categorias-equipamento', {
-        
-      });
+      navigate('/categorias-equipamento');
+
     } catch (error) {
       toast.error(`Erro ao ${isEditing ? 'atualizar' : 'criar'} a categoria de equipamento`);
     } finally {
@@ -62,20 +61,17 @@ export default function CategoriaEquipamentoForm() {
   };
 
   const handleOnCloseModal = () => {
-    // setIsModalOpen(false);
-   // navigate('../')
+    setIsModalOpen(false);
+    navigate('/categorias-equipamento')
   }
 
   return (
     <Modal
       onCloseModal={() => handleOnCloseModal()}
       show={isModalOpen} 
-      disabledConfirmButton={isLoading}
+      isLoading={isLoading}
       title={isEditing ? 'Editar categoria de equipamento' : 'Nova categoria equipamento'}
-      onComplete={() => {
-        console.log(formRef.current?.requestSubmit())
-        
-      }}>
+      onComplete={() => formRef.current?.requestSubmit()}>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" ref={formRef}>
             <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
               {isEditing && <div className="sm:col-span-3">
@@ -85,14 +81,14 @@ export default function CategoriaEquipamentoForm() {
 
                 <Input type="text" disabled id="id" {...register('categoria_id', { required: 'Nome é obrigatório' })} error={errors.nome && errors.nome.message}></Input>
               </div>}
-              <div className={`sm:col-span-${isEditing ? '3' : '4'}`}>
+              <div className={`sm:col-span-${isEditing ? '3' : '3'}`}>
                 <label htmlFor="nome" className="block mb-2 text-sm font-medium text-gray-700">
                   Nome *
                 </label>
 
                 <Input type="text" id="nome" {...register('nome', { required: 'Nome é obrigatório' })} error={errors.nome && errors.nome.message}></Input>
               </div>
-              <div className={`sm:col-span-${isEditing ? '3' : '4'}`}>
+              <div className={`sm:col-span-${isEditing ? '3' : '3'}`}>
                 <label htmlFor="descricao" className="block mb-2 text-sm font-medium text-gray-700">
                   Descricao
                 </label>
